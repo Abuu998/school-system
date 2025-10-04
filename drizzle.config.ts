@@ -1,15 +1,12 @@
 import type { Config } from "drizzle-kit"
 import env from "@/lib/env"
 
-
-
 export default {
-    schema: "./db/schema.ts",
+    schema: "./db/schema/index.ts",
     dialect: "postgresql",
     out: "./db/migrations",
     // driver: "",
     dbCredentials: {
         url: env.DATABASE_URL
     }
-
 } satisfies Config
