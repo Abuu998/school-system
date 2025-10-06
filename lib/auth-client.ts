@@ -1,6 +1,8 @@
 import { createAuthClient } from "better-auth/react"
+import { adminClient } from "better-auth/client/plugins"
 import env from "./env"
 
-export const { signIn, signOut, signUp, useSession, getSession } = createAuthClient({
-    baseURL: env.BETTER_AUTH_URL
+export const authClient = createAuthClient({
+    baseURL: env.BETTER_AUTH_URL,
+    plugins: [adminClient()]
 })
