@@ -1,7 +1,10 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, boolean, uuid, pgEnum } from "drizzle-orm/pg-core";
+import { students } from "./student";
+import { parents } from "./parent";
+import { teachers } from "./teacher";
 
-export const roleEnum = pgEnum("roles", ["admin", "teacher", "student"])
+// export const roleEnum = pgEnum("roles", ["admin", "user", "teacher", "student", "parent"])
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -14,7 +17,7 @@ export const users = pgTable("users", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-  role: text("role"),
+  role: text("role").notNull().default("user"),
   banned: boolean("banned").default(false),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
@@ -71,9 +74,12 @@ export const verifications = pgTable("verifications", {
 
 
 // RELATIONS
-export const userRelations = relations(users, ({ one }) => ({
+export const userRelations = relations(users, ({ one, many }) => ({
     session: one(sessions),
     account: one(accounts),
+    student: many(students),
+    parent: many(parents),
+    teacher: many(teachers)
 })) 
 
 export const accountRelations = relations(accounts, ({ one }) => ({
