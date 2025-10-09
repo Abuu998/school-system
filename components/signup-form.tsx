@@ -1,18 +1,15 @@
-"use client"
+"use client";
 
-import { cn, wait } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn, wait } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldDescription,
-} from "@/components/ui/field"
+} from "@/components/ui/card";
+import { Field, FieldDescription } from "@/components/ui/field";
 import {
   Form,
   FormControl,
@@ -20,52 +17,64 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import Link from "next/link"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
-import { Spinner } from "./ui/spinner"
-import { toast } from "sonner"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Spinner } from "./ui/spinner";
+import { toast } from "sonner";
 
-const Roles = ["admin", "teacher", "parent", "student"] as const
+const Roles = ["admin", "teacher", "parent", "student"] as const;
 // type Role = (typeof Roles)[number];
 
-const formSchema = z.object({
-  name: z.string("Name is a required field"),
-  email: z.email("Must be a valid email address"),
-  role: z.enum(Roles),
-  password: z.string().min(8, "Password must be at least 8 characters").trim(),
-  confirmPassword: z.string().min(8, "Password must be at least 8 characters").trim()
-}).refine(
-  ({ confirmPassword, password }) => password === confirmPassword,
-  { 
-    error: "Passwords does not match",
-    path: ["confirmPassword"] 
+const formSchema = z
+  .object({
+    name: z.string("Name is a required field"),
+    email: z.email("Must be a valid email address"),
+    role: z.enum(Roles),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .trim(),
+    confirmPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .trim(),
   })
+  .refine(({ confirmPassword, password }) => password === confirmPassword, {
+    error: "Passwords does not match",
+    path: ["confirmPassword"],
+  });
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "admin"
-      },
-    })
-  
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-      await wait()
-      console.log(values)
-      toast.success("Signed up successfully")
-    }
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "admin",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await wait();
+    console.log(values);
+    toast.success("Signed up successfully");
+  }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -73,7 +82,7 @@ export function SignupForm({
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Create your account</CardTitle>
           <CardDescription>
-            Enter your email below to create your account
+            Enter your details below to create your account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -99,7 +108,11 @@ export function SignupForm({
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="example@email.com" {...field} />
+                      <Input
+                        type="email"
+                        placeholder="example@email.com"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -111,7 +124,10 @@ export function SignupForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Role</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl className="w-full">
                         <SelectTrigger>
                           <SelectValue placeholder="Select a role" />
@@ -119,7 +135,12 @@ export function SignupForm({
                       </FormControl>
                       <SelectContent>
                         {Roles.map((rol, i) => (
-                          <SelectItem key={`key_random-${rol}-${i}`} value={rol}>{`${rol[0].toUpperCase()}${rol.slice(1)}`}</SelectItem>
+                          <SelectItem
+                            key={`key_random-${rol}-${i}`}
+                            value={rol}
+                          >{`${rol[0].toUpperCase()}${rol.slice(
+                            1
+                          )}`}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -136,7 +157,11 @@ export function SignupForm({
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="**********" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="**********"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -149,7 +174,11 @@ export function SignupForm({
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="**********" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="**********"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -174,5 +203,5 @@ export function SignupForm({
         and <a href="#">Privacy Policy</a>.
       </FieldDescription>
     </div>
-  )
+  );
 }
